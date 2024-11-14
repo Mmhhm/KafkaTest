@@ -1,0 +1,55 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+volumes:
+  db_data:
+
+#  mongodb:
+#    image: mongo:4.4
+#    container_name: mongodb
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#        - ./mongo-data-4-4:/data/db
+#    healthcheck:
+#      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+
+
+#  all_messages_consumer:
+#    build: ./all_messages_consumer
+#    container_name: all_messages_consumer
+#    depends_on:
+#      kafka:
+#        condition: service_healthy
+#
+#  get_all_messages:
+#    build: ./get_all_messages
+#    container_name: get_all_messages
+#    depends_on:
+#      kafka:
+#        condition: service_healthy
+
+
+
